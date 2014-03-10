@@ -10,6 +10,10 @@ class Application;
 class LocaleHandler;
 }}
 
+namespace bbext { namespace multimedia {
+class MediaLibrary;
+}}
+
 class QTranslator;
 
 class ApplicationUI : public QObject
@@ -22,9 +26,11 @@ private slots:
     void onSystemLanguageChanged();
     void onMediaAdded(const bbext::multimedia::MediaFile &mediaFile);
     void onMediaDeleted(const bbext::multimedia::MediaFile &mediaFile);
+    void onTestQuery();
 private:
     QTranslator* translator_;
     bb::cascades::LocaleHandler* localeHandler_;
+    bbext::multimedia::MediaLibrary *mediaLibrary_;
 };
 
 #endif // APPLICATIONUI_HPP

@@ -19,6 +19,8 @@ public:
     MediaLibrary(QObject *parent=0);
     virtual ~MediaLibrary();
 
+    MediaFile findMediaFile(const QString &filePath);
+
 Q_SIGNALS:
     void mediaAdded(const bbext::multimedia::MediaFile &mediaFile);
     void mediaDeleted(const bbext::multimedia::MediaFile &mediaFile);
