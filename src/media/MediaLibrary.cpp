@@ -41,6 +41,8 @@ public:
     void loadMediaFileData(const QString &filePath, MediaFile *mediaFile);
     void queryMediaFileData(QSqlDatabase mediaDb, MediaFile *mediaFile);
     QString queryMediaThumbnail(FilePerimeter::Type perimeter, int fileId);
+    QString queryAudioArtwork(FilePerimeter::Type perimeter, int fileId);
+    QString queryVideoArtwork(FilePerimeter::Type perimeter, int fileId);
 
     bb::PpsObject *syncPpsObject_;
     MediaLibrary *q_ptr;
@@ -185,6 +187,19 @@ QString MediaLibrary::mediaThumbnail(const MediaFile &mediaFile)
 {
     Q_D(MediaLibrary);
     return d->queryMediaThumbnail(mediaFile.perimeter(), mediaFile.fileId());
+}
+
+QString MediaLibrary::mediaArtwork(const MediaFile &mediaFile)
+{
+    Q_D(MediaLibrary);
+    switch(mediaFile.fileType()) {
+    case FileType::Audio:
+        return d->queryAudioArtwork(mediaFile.perimeter(), mediaFile.fileId());
+    case FileType::Video:
+        return d->queryVideoArtwork(mediaFile.perimeter(), mediaFile.fileId());
+    default:
+        return QString::null;
+    }
 }
 
 QSqlDatabase MediaLibraryPrivate::addMediaDatabase(FilePerimeter::Type perimeter)
@@ -340,6 +355,70 @@ QString MediaLibraryPrivate::queryMediaThumbnail(FilePerimeter::Type perimeter, 
         qWarning() << mediaDb.lastError();
     }
     return thumbnailFile;
+}
+
+QString MediaLibraryPrivate::queryAudioArtwork(FilePerimeter::Type perimeter, int fileId)
+{
+    QString artworkFile;
+    QSqlDatabase mediaDb = addMediaDatabase(perimeter);
+    if(mediaDb.isValid() && mediaDb.open()) {
+        QSqlQuery query(mediaDb);
+        query.setForwardOnly(true);
+
+        query.prepare("SELECT audio_artworks.imgfs_filename "
+            "FROM audio_artworks, audio_metadata "
+            "WHERE audio_metadata.fid = :fid "
+            "AND audio_metadata.artwork_id > 0 "
+            "AND audio_metadata.artwork_id = audio_artworks.artwork_id");
+        query.bindValue(":fid", fileId);
+
+        if(query.exec()) {
+            if(query.next()) {
+                artworkFile = query.value(0).toString();
+            }
+        }
+        else {
+            qWarning() << "Unable to query artwork:" << query.lastError();
+        }
+
+        mediaDb.close();
+    }
+    else {
+        qWarning() << mediaDb.lastError();
+    }
+    return artworkFile;
+}
+
+QString MediaLibraryPrivate::queryVideoArtwork(FilePerimeter::Type perimeter, int fileId)
+{
+    QString artworkFile;
+    QSqlDatabase mediaDb = addMediaDatabase(perimeter);
+    if(mediaDb.isValid() && mediaDb.open()) {
+        QSqlQuery query(mediaDb);
+        query.setForwardOnly(true);
+
+        query.prepare("SELECT video_artworks.imgfs_filename "
+            "FROM video_artworks, video_metadata "
+            "WHERE video_metadata.fid = :fid "
+            "AND video_metadata.video_artwork_id > 0 "
+            "AND video_metadata.video_artwork_id = video_artworks.video_artwork_id");
+        query.bindValue(":fid", fileId);
+
+        if(query.exec()) {
+            if(query.next()) {
+                artworkFile = query.value(0).toString();
+            }
+        }
+        else {
+            qWarning() << "Unable to query artwork:" << query.lastError();
+        }
+
+        mediaDb.close();
+    }
+    else {
+        qWarning() << mediaDb.lastError();
+    }
+    return artworkFile;
 }
 
 } // namespace multimedia

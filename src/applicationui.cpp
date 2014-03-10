@@ -65,11 +65,15 @@ void ApplicationUI::onTestQuery()
 
     bbext::multimedia::MediaFile videoFile = mediaLibrary_->findMediaFile("shared/videos/Videos - Chromatic.mp4");
     QString videoThumbnail = mediaLibrary_->mediaThumbnail(videoFile);
+    QString videoArtwork = mediaLibrary_->mediaArtwork(videoFile);
     qDebug() << "Video:" << videoFile;
     qDebug() << "  Thumbnail:" << videoThumbnail;
+    qDebug() << "  Artwork:" << videoArtwork;
 
     bbext::multimedia::MediaFile audioFile = mediaLibrary_->findMediaFile("shared/music/Tetris.mp3");
     QString audioThumbnail = mediaLibrary_->mediaThumbnail(audioFile);
+    QString audioArtwork = mediaLibrary_->mediaArtwork(audioFile);
     qDebug() << "Audio:" << audioFile;
     qDebug() << "  Thumbnail:" << audioThumbnail;
+    qDebug() << "  Artwork:" << audioArtwork;
 }

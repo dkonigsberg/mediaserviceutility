@@ -22,6 +22,7 @@ public:
     MediaFile findMediaFile(const QString &filePath);
 
     QString mediaThumbnail(const MediaFile &mediaFile);
+    QString mediaArtwork(const MediaFile &mediaFile);
 
 Q_SIGNALS:
     void mediaAdded(const bbext::multimedia::MediaFile &mediaFile);
