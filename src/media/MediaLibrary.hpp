@@ -21,6 +21,8 @@ public:
 
     MediaFile findMediaFile(const QString &filePath);
 
+    QString mediaThumbnail(const MediaFile &mediaFile);
+
 Q_SIGNALS:
     void mediaAdded(const bbext::multimedia::MediaFile &mediaFile);
     void mediaDeleted(const bbext::multimedia::MediaFile &mediaFile);

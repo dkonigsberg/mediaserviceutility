@@ -40,6 +40,7 @@ public:
 
     void loadMediaFileData(const QString &filePath, MediaFile *mediaFile);
     void queryMediaFileData(QSqlDatabase mediaDb, MediaFile *mediaFile);
+    QString queryMediaThumbnail(FilePerimeter::Type perimeter, int fileId);
 
     bb::PpsObject *syncPpsObject_;
     MediaLibrary *q_ptr;
@@ -180,6 +181,12 @@ MediaFile MediaLibrary::findMediaFile(const QString &filePath)
     return mediaFile;
 }
 
+QString MediaLibrary::mediaThumbnail(const MediaFile &mediaFile)
+{
+    Q_D(MediaLibrary);
+    return d->queryMediaThumbnail(mediaFile.perimeter(), mediaFile.fileId());
+}
+
 QSqlDatabase MediaLibraryPrivate::addMediaDatabase(FilePerimeter::Type perimeter)
 {
     const QString connectionName = mediaDatabaseConnectionName(perimeter);
@@ -302,6 +309,37 @@ void MediaLibraryPrivate::queryMediaFileData(QSqlDatabase mediaDb, MediaFile *me
     else {
         qWarning() << "Unable to find file ID:" << path;
     }
+}
+
+QString MediaLibraryPrivate::queryMediaThumbnail(FilePerimeter::Type perimeter, int fileId)
+{
+    QString thumbnailFile;
+    QSqlDatabase mediaDb = addMediaDatabase(perimeter);
+    if(mediaDb.isValid() && mediaDb.open()) {
+        QSqlQuery query(mediaDb);
+        query.setForwardOnly(true);
+
+        query.prepare("SELECT thumbnails.imgfs_filename "
+            "FROM thumbnails, files_thumbnails_rel "
+            "WHERE files_thumbnails_rel.fid = :fid "
+            "AND files_thumbnails_rel.thumbid = thumbnails.thumbid");
+        query.bindValue(":fid", fileId);
+
+        if(query.exec()) {
+            if(query.next()) {
+                thumbnailFile = query.value(0).toString();
+            }
+        }
+        else {
+            qWarning() << "Unable to query thumbnail:" << query.lastError();
+        }
+
+        mediaDb.close();
+    }
+    else {
+        qWarning() << mediaDb.lastError();
+    }
+    return thumbnailFile;
 }
 
 } // namespace multimedia
