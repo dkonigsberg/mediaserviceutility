@@ -25,8 +25,14 @@ QDebug operator<<(QDebug dbg, const FileType::Type &fileType)
     case FileType::Video:
         dbg << "FileType::Video";
         break;
+    case FileType::AudioVideo:
+        dbg << "FileType::AudioVideo";
+        break;
     case FileType::Photo:
         dbg << "FileType::Photo";
+        break;
+    case FileType::Device:
+        dbg << "FileType::Device";
         break;
     case FileType::Document:
         dbg << "FileType::Document";

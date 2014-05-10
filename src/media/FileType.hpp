@@ -18,7 +18,9 @@ public:
         Unknown = 0,
         Audio = 1,
         Video = 2,
+        AudioVideo = 3,
         Photo = 4,
+        Device = 5,
         Document = 6,
         Other = 99
     };

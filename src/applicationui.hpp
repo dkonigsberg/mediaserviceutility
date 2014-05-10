@@ -26,6 +26,8 @@ private slots:
     void onSystemLanguageChanged();
     void onMediaAdded(const bbext::multimedia::MediaFile &mediaFile);
     void onMediaDeleted(const bbext::multimedia::MediaFile &mediaFile);
+    void onMediaUpdated(const bbext::multimedia::MediaFile &mediaFile);
+    void onMediaInvalidated(const bbext::multimedia::MediaFile &mediaFile);
     void onTestQuery();
 private:
     QTranslator* translator_;

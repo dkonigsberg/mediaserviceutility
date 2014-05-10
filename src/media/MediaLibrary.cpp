@@ -118,10 +118,16 @@ void MediaLibraryPrivate::_q_syncReadyRead()
 
     QString eventType = changeData["change"].toString();
     if(eventType == QLatin1String("added")) {
-        q->emit mediaAdded(mediaFile);
+        emit q->mediaAdded(mediaFile);
     }
     else if(eventType == QLatin1String("del")) {
-        q->emit mediaDeleted(mediaFile);
+        emit q->mediaDeleted(mediaFile);
+    }
+    else if(eventType == QLatin1String("updated")) {
+        emit q->mediaUpdated(mediaFile);
+    }
+    else if(eventType == QLatin1String("invalidated")) {
+        emit q->mediaInvalidated(mediaFile);
     }
     else {
         qWarning() << "Unknown sync event type:" << eventType;
@@ -164,8 +170,12 @@ FileType::Type MediaLibraryPrivate::fileTypeFromValue(int fileTypeValue)
         return FileType::Audio;
     case 2:
         return FileType::Video;
+    case 3:
+        return FileType::AudioVideo;
     case 4:
         return FileType::Photo;
+    case 5:
+        return FileType::Device;
     case 6:
         return FileType::Document;
     case 99:

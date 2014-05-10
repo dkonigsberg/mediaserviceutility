@@ -27,6 +27,8 @@ public:
 Q_SIGNALS:
     void mediaAdded(const bbext::multimedia::MediaFile &mediaFile);
     void mediaDeleted(const bbext::multimedia::MediaFile &mediaFile);
+    void mediaUpdated(const bbext::multimedia::MediaFile &mediaFile);
+    void mediaInvalidated(const bbext::multimedia::MediaFile &mediaFile);
 
 private:
     Q_DISABLE_COPY(MediaLibrary)

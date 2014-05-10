@@ -32,6 +32,10 @@ ApplicationUI::ApplicationUI(bb::cascades::Application *app) :
         this, SLOT(onMediaAdded(bbext::multimedia::MediaFile)));
     connect(mediaLibrary_, SIGNAL(mediaDeleted(bbext::multimedia::MediaFile)),
         this, SLOT(onMediaDeleted(bbext::multimedia::MediaFile)));
+    connect(mediaLibrary_, SIGNAL(mediaUpdated(bbext::multimedia::MediaFile)),
+        this, SLOT(onMediaUpdated(bbext::multimedia::MediaFile)));
+    connect(mediaLibrary_, SIGNAL(mediaInvalidated(bbext::multimedia::MediaFile)),
+        this, SLOT(onMediaInvalidated(bbext::multimedia::MediaFile)));
 }
 
 void ApplicationUI::onSystemLanguageChanged()
@@ -54,23 +58,33 @@ void ApplicationUI::onMediaDeleted(const bbext::multimedia::MediaFile &mediaFile
     qDebug() << "--> onMediaDeleted:" << mediaFile;
 }
 
+void ApplicationUI::onMediaUpdated(const bbext::multimedia::MediaFile &mediaFile)
+{
+    qDebug() << "--> onMediaUpdated:" << mediaFile;
+}
+
+void ApplicationUI::onMediaInvalidated(const bbext::multimedia::MediaFile &mediaFile)
+{
+    qDebug() << "--> onMediaInvalidated:" << mediaFile;
+}
+
 void ApplicationUI::onTestQuery()
 {
     qDebug() << "--> onTestQuery";
 
-    bbext::multimedia::MediaFile photoFile = mediaLibrary_->findMediaFile("shared/photos/arrakeenday11440x1280.jpg");
+    bbext::multimedia::MediaFile photoFile = mediaLibrary_->findMediaFile("shared/photos/test-image.jpg");
     QString photoThumbnail = mediaLibrary_->mediaThumbnail(photoFile);
     qDebug() << "Photo:" << photoFile;
     qDebug() << "  Thumbnail:" << photoThumbnail;
 
-    bbext::multimedia::MediaFile videoFile = mediaLibrary_->findMediaFile("shared/videos/Videos - Chromatic.mp4");
+    bbext::multimedia::MediaFile videoFile = mediaLibrary_->findMediaFile("shared/videos/test-video.mp4");
     QString videoThumbnail = mediaLibrary_->mediaThumbnail(videoFile);
     QString videoArtwork = mediaLibrary_->mediaArtwork(videoFile);
     qDebug() << "Video:" << videoFile;
     qDebug() << "  Thumbnail:" << videoThumbnail;
     qDebug() << "  Artwork:" << videoArtwork;
 
-    bbext::multimedia::MediaFile audioFile = mediaLibrary_->findMediaFile("shared/music/Tetris.mp3");
+    bbext::multimedia::MediaFile audioFile = mediaLibrary_->findMediaFile("shared/music/test-audio.mp3");
     QString audioThumbnail = mediaLibrary_->mediaThumbnail(audioFile);
     QString audioArtwork = mediaLibrary_->mediaArtwork(audioFile);
     qDebug() << "Audio:" << audioFile;
