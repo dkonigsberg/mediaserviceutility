@@ -15,7 +15,6 @@ namespace multimedia
 {
 
 class MediaLibraryPrivate;
-class MediaSyncServicePrivate;
 class MediaFileData;
 
 class MediaFile
@@ -37,7 +36,6 @@ public:
 private:
     QSharedDataPointer<MediaFileData> d;
     friend class MediaLibraryPrivate;
-    friend class MediaSyncServicePrivate;
 };
 
 QDebug operator<<(QDebug dbg, const MediaFile &mediaFile);
