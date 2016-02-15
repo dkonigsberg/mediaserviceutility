@@ -40,9 +40,9 @@ public:
 
     void loadMediaFileData(const QString &filePath, MediaFile *mediaFile);
     void queryMediaFileData(QSqlDatabase mediaDb, MediaFile *mediaFile);
-    QString queryMediaThumbnail(FilePerimeter::Type perimeter, int fileId);
-    QString queryAudioArtwork(FilePerimeter::Type perimeter, int fileId);
-    QString queryVideoArtwork(FilePerimeter::Type perimeter, int fileId);
+    QString queryMediaThumbnail(FilePerimeter::Type perimeter, qlonglong fileId);
+    QString queryAudioArtwork(FilePerimeter::Type perimeter, qlonglong fileId);
+    QString queryVideoArtwork(FilePerimeter::Type perimeter, qlonglong fileId);
 
     bb::PpsObject *syncPpsObject_;
     MediaLibrary *q_ptr;
@@ -336,7 +336,7 @@ void MediaLibraryPrivate::queryMediaFileData(QSqlDatabase mediaDb, MediaFile *me
     }
 }
 
-QString MediaLibraryPrivate::queryMediaThumbnail(FilePerimeter::Type perimeter, int fileId)
+QString MediaLibraryPrivate::queryMediaThumbnail(FilePerimeter::Type perimeter, qlonglong fileId)
 {
     QString thumbnailFile;
     QSqlDatabase mediaDb = addMediaDatabase(perimeter);
@@ -367,7 +367,7 @@ QString MediaLibraryPrivate::queryMediaThumbnail(FilePerimeter::Type perimeter, 
     return thumbnailFile;
 }
 
-QString MediaLibraryPrivate::queryAudioArtwork(FilePerimeter::Type perimeter, int fileId)
+QString MediaLibraryPrivate::queryAudioArtwork(FilePerimeter::Type perimeter, qlonglong fileId)
 {
     QString artworkFile;
     QSqlDatabase mediaDb = addMediaDatabase(perimeter);
@@ -399,7 +399,7 @@ QString MediaLibraryPrivate::queryAudioArtwork(FilePerimeter::Type perimeter, in
     return artworkFile;
 }
 
-QString MediaLibraryPrivate::queryVideoArtwork(FilePerimeter::Type perimeter, int fileId)
+QString MediaLibraryPrivate::queryVideoArtwork(FilePerimeter::Type perimeter, qlonglong fileId)
 {
     QString artworkFile;
     QSqlDatabase mediaDb = addMediaDatabase(perimeter);
